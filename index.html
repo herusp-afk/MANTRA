@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>UTAW — Narasi Start</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gdim:#7A6230;--pale:#FFE9A0;--white:#F0EDE6;--dim:rgba(240,237,230,.38);--bg:#07090F;--green:#9ED4A8}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--white);font-family:'Lato',sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-touch-callout:none}
+canvas#bgc{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.ov{position:fixed;inset:0;background:linear-gradient(to bottom,rgba(7,9,15,.6) 0%,rgba(7,9,15,.1) 35%,rgba(7,9,15,.55) 72%,rgba(7,9,15,.97) 100%);z-index:1}
+#app{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;padding:env(safe-area-inset-top,12px) 16px env(safe-area-inset-bottom,16px)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 0 6px;flex-shrink:0}
+.logo{font-family:'Cinzel',serif;font-size:clamp(9px,2.5vw,13px);font-weight:600;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.timer{font-size:clamp(12px,3vw,16px);font-weight:300;color:var(--dim);letter-spacing:.1em}
+#ct{color:var(--white);font-weight:400}
+.pw{width:100%;height:3px;background:rgba(255,255,255,.07);border-radius:3px;flex-shrink:0;margin-bottom:4px}
+#pb{height:100%;width:0%;border-radius:3px;transition:width .25s linear;background:linear-gradient(90deg,var(--gdim),var(--gold))}
+.na{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 8px;min-height:0;overflow:hidden}
+#pl{font-family:'Cinzel',serif;font-size:clamp(10px,2.5vw,15px);font-weight:400;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:clamp(8px,2vh,18px);opacity:0;transition:opacity .5s;min-height:1.2em;line-height:1.3}
+#mt{font-family:'Cinzel',serif;font-size:clamp(22px,5.5vw,42px);font-weight:400;line-height:1.55;color:var(--white);text-shadow:0 2px 30px rgba(0,0,0,.95);min-height:2.5em;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .28s ease;padding:0 4px;word-break:keep-all}
+#mt.B{font-weight:700;color:var(--pale)}
+#mt.W{font-weight:300;color:var(--dim);font-style:italic;font-size:clamp(19px,4.8vw,36px)}
+#mt.G{color:var(--green);font-weight:600}
+#mt.T{color:var(--gold);font-size:clamp(20px,5vw,38px);font-weight:600;letter-spacing:.08em}
+.sub{font-size:clamp(12px,3vw,18px);color:var(--dim);margin-top:.5em;font-weight:300;font-family:'Lato',sans-serif}
+#jb{margin-top:clamp(8px,2vh,16px);display:flex;gap:8px;align-items:center;opacity:0;transition:opacity .3s}
+.jd{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pu 1.2s ease-in-out infinite}
+.jd:nth-child(2){animation-delay:.2s}.jd:nth-child(3){animation-delay:.4s}
+.jl{font-family:'Lato',sans-serif;font-size:clamp(10px,2.5vw,14px);letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-left:4px}
+@keyframes pu{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+#nl{margin-top:clamp(6px,1.5vh,14px);font-family:'Lato',sans-serif;font-size:clamp(11px,2.5vw,16px);font-weight:300;color:rgba(240,237,230,.2);font-style:italic;min-height:1.3em;line-height:1.4;padding:0 8px}
+#fi{font-size:clamp(10px,2.5vw,14px);letter-spacing:.18em;color:var(--gold);opacity:0;transition:opacity 1s;margin-top:6px;font-family:'Cinzel',serif}
+.spdr{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:clamp(8px,2vh,16px);flex-shrink:0}
+.splab{font-size:clamp(10px,2.5vw,13px);letter-spacing:.18em;color:var(--gdim);text-transform:uppercase}
+.spb{font-family:'Cinzel',serif;font-size:clamp(13px,3vw,16px);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06);color:var(--gdim);padding:10px 20px;border-radius:3px;cursor:pointer;-webkit-appearance:none;min-height:48px;min-width:52px;touch-action:manipulation}
+.spb:active{background:rgba(201,168,76,.25);border-color:var(--gold);color:var(--gold)}
+#sd{font-family:'Cinzel',serif;font-size:clamp(14px,3.5vw,17px);color:var(--gold);min-width:3.5em;text-align:center}
+.bot{display:flex;align-items:center;justify-content:center;gap:10px;padding-top:clamp(6px,1.5vh,12px);flex-shrink:0}
+.btn{font-family:'Lato',sans-serif;font-size:clamp(13px,3.2vw,17px);letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(201,168,76,.32);background:rgba(201,168,76,.07);color:var(--gold);border-radius:3px;cursor:pointer;-webkit-appearance:none;min-height:52px;min-width:84px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:6px;touch-action:manipulation}
+.btn.p{background:rgba(201,168,76,.22);border-color:var(--gold);color:var(--pale)}
+.btn:active{opacity:.65}
+#wk{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+8px);right:14px;font-size:10px;letter-spacing:.1em;color:rgba(201,168,76,.25);z-index:20}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;z-index:200;background:rgba(7,9,15,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,3.5vh,28px);padding:28px;text-align:center}
+#splash h1{font-family:'Cinzel',serif;font-size:clamp(22px,6vw,40px);font-weight:700;color:var(--gold);letter-spacing:.06em;line-height:1.3}
+#splash p{font-size:clamp(13px,3.5vw,17px);color:var(--dim);line-height:1.7;max-width:340px}
+#splash .note{font-size:clamp(11px,2.5vw,14px);color:rgba(240,237,230,.28);max-width:300px;line-height:1.6}
+#tapbtn{font-family:'Cinzel',serif;font-size:clamp(17px,4.5vw,24px);font-weight:700;letter-spacing:.15em;color:#07090F;background:var(--gold);border:none;border-radius:5px;padding:clamp(16px,4vw,22px) clamp(32px,8vw,56px);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;box-sizing:border-box;display:block;min-width:200px;box-shadow:0 4px 28px rgba(201,168,76,.45)}
+#tapbtn:active{opacity:.75}
+#errmsg{font-size:13px;color:#e74c3c;min-height:20px;margin-top:-8px}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div class="ov"></div>
+
+<div id="splash">
+  <h1>Ultra Trail<br>Arjuno Welirang</h1>
+  <p>Teleprompter Narasi Start<br>&#9834; Compass &mdash; Thomas Bergersen</p>
+  <button id="tapbtn">&#9654;&nbsp; MULAI</button>
+  <div id="errmsg"></div>
+  <p class="note">Pastikan volume HP sudah penuh<br>Layar tidak akan mati otomatis</p>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="logo">UTAW &middot; Narasi Start</div>
+    <div class="timer"><span id="ct">0:00</span><span style="opacity:.3"> / 5:15</span></div>
+  </div>
+  <div class="pw"><div id="pb"></div></div>
+  <div class="na">
+    <div id="pl"></div>
+    <div id="mt"></div>
+    <div id="jb"><div class="jd"></div><div class="jd"></div><div class="jd"></div><div class="jl">Jeda</div></div>
+    <div id="nl"></div>
+    <div id="fi">&#9834; Lagu memudar...</div>
+  </div>
+  <div class="spdr">
+    <div class="splab">Kec.</div>
+    <button class="spb" id="bminus">&#8722;</button>
+    <div id="sd">1.0&times;</div>
+    <button class="spb" id="bplus">+</button>
+    <button class="spb" id="breset">&#8635;</button>
+  </div>
+  <div class="bot">
+    <button class="btn" id="brul">&#8635; Ulang</button>
+    <button class="btn p" id="bpp">&#9646;&#9646; Pause</button>
+    <button class="btn" id="bfs" style="min-width:52px;padding:0 12px">&#9974;</button>
+  </div>
+</div>
+<div id="wk"></div>
+<audio id="au" preload="auto" src="compass.mp3"></audio>
+
+<script>
+var FADE_START=305.0,AUDIO_STOP=315.0,NS=55;
+var BASE=[{"t": 0, "s": "T", "text": "Ultra Trail Arjuno Welirang", "sub": "Narasi Start · Compass"}, {"t": 15, "s": "X", "ph": "♪  Musik mengalun..."}, {"t": 38, "s": "X", "ph": "♪  Narasi masuk 0:55 — bersiap"}, {"t": 51, "s": "X", "ph": "♪  Empat detik lagi..."}, {"t": 55.0, "n": 1, "s": "N", "ph": "NARASI MULAI", "text": "Kalian berdiri di kaki gunung", "nx": "yang telah menyaksikan ribuan langkah..."}, {"t": 59.1, "n": 1, "s": "J"}, {"t": 60.7, "n": 1, "s": "N", "text": "yang telah menyaksikan ribuan langkah...", "nx": "ribuan doa..."}, {"t": 64.8, "n": 1, "s": "J"}, {"t": 66.4, "n": 1, "s": "W", "text": "ribuan doa...", "nx": "dan ribuan manusia yang datang"}, {"t": 68.4, "n": 1, "s": "J"}, {"t": 70.0, "n": 1, "s": "N", "text": "dan ribuan manusia yang datang", "nx": "bukan untuk menaklukkan —"}, {"t": 74.1, "n": 1, "s": "N", "text": "bukan untuk menaklukkan —", "nx": "tapi untuk menemukan."}, {"t": 77.8, "n": 1, "s": "B", "text": "tapi untuk menemukan."}, {"t": 83.5, "n": 1, "s": "B", "ph": "GUNUNG & SAKSI", "text": "Arjuno. Welirang.", "nx": "Dua raksasa yang berdiri dalam diam —"}, {"t": 87.5, "n": 1, "s": "J"}, {"t": 89.1, "n": 1, "s": "N", "text": "Dua raksasa yang berdiri dalam diam —", "nx": "hari ini, mereka menjadi saksi perjalananmu."}, {"t": 93.2, "n": 1, "s": "N", "text": "hari ini, mereka menjadi saksi perjalananmu."}, {"t": 98.1, "n": 1, "s": "J"}, {"t": 99.7, "n": 1, "s": "N", "text": "Ingat mengapa kamu di sini.", "nx": "Bukan karena mudah."}, {"t": 103.8, "n": 1, "s": "N", "text": "Bukan karena mudah.", "nx": "Justru karena tidak mudah."}, {"t": 107.8, "n": 1, "s": "B", "text": "Justru karena tidak mudah."}, {"t": 116.0, "n": 1, "s": "N", "ph": "PERJUANGAN & KAWAN", "text": "Di luar sana ada kabut, akar, batu, gelap, dan angin.", "nx": "Tapi di sana juga ada versi dirimu..."}, {"t": 120.9, "n": 1, "s": "J"}, {"t": 122.5, "n": 1, "s": "N", "text": "Tapi di sana juga ada versi dirimu...", "nx": "yang belum pernah kamu temui sebelumnya."}, {"t": 126.5, "n": 1, "s": "W", "text": "yang belum pernah kamu temui sebelumnya."}, {"t": 129.8, "n": 1, "s": "J"}, {"t": 131.4, "n": 1, "s": "N", "text": "Lihat ke kanan dan kirimu.", "nx": "Mereka bukan pesaingmu —"}, {"t": 135.5, "n": 1, "s": "N", "text": "Mereka bukan pesaingmu —", "nx": "mereka adalah bagian dari perjalananmu."}, {"t": 138.7, "n": 1, "s": "B", "text": "mereka adalah bagian dari perjalananmu."}, {"t": 146.9, "n": 1, "s": "B", "ph": "★  KLIMAKS", "text": "Dalam gelap nanti, merekalah cahayamu.", "nx": "Dalam lelah nanti, merekalah alasanmu melanjutkan."}, {"t": 150.9, "n": 1, "s": "B", "text": "Dalam lelah nanti, merekalah alasanmu melanjutkan."}, {"t": 155.0, "n": 1, "s": "J"}, {"t": 156.6, "n": 1, "s": "B", "text": "Gunung tidak menilai kecepatanmu.", "nx": "Alam tidak peduli nomor BIB-mu."}, {"t": 159.9, "n": 1, "s": "B", "text": "Alam tidak peduli nomor BIB-mu.", "nx": "Yang mereka tahu —"}, {"t": 162.7, "n": 1, "s": "B", "text": "Yang mereka tahu —", "nx": "kamu datang. kamu berani. kamu hadir."}, {"t": 165.2, "n": 1, "s": "B", "text": "kamu datang. kamu berani. kamu hadir."}, {"t": 171.3, "n": 1, "s": "N", "ph": "MELUNAK", "text": "Bawa langkahmu dengan hormat.", "nx": "Bawa hatimu dengan penuh."}, {"t": 174.9, "n": 1, "s": "N", "text": "Bawa hatimu dengan penuh."}, {"t": 178.6, "n": 1, "s": "J"}, {"t": 180.2, "n": 1, "s": "N", "text": "Dan ketika puncak kabut menyambutmu —", "nx": "biarkan air mata itu jatuh."}, {"t": 183.9, "n": 1, "s": "W", "text": "biarkan air mata itu jatuh."}, {"t": 187.5, "n": 1, "s": "N", "ph": "TENANG", "text": "Karena itulah alasan kita berlari.", "nx": "Bukan dari sesuatu —"}, {"t": 191.2, "n": 1, "s": "N", "text": "Bukan dari sesuatu —", "nx": "tapi menuju sesuatu."}, {"t": 194.4, "n": 1, "s": "B", "text": "tapi menuju sesuatu."}, {"t": 198.9, "n": 1, "s": "N", "ph": "FINALE · FINISH LINE", "text": "Dan di ujung perjalanan ini...", "nx": "ada garis finish yang menunggumu."}, {"t": 202.1, "n": 1, "s": "N", "text": "ada garis finish yang menunggumu."}, {"t": 205.0, "n": 1, "s": "J"}, {"t": 206.6, "n": 1, "s": "W", "text": "Tapi bukan sekadar garis."}, {"t": 209.1, "n": 1, "s": "J"}, {"t": 210.7, "n": 1, "s": "N", "text": "Di baliknya —"}, {"t": 212.3, "n": 1, "s": "N", "text": "ada seseorang yang menyebut namamu dalam doa.", "nx": "Ada pelukan yang sudah disiapkan sejak kamu berangkat."}, {"t": 214.8, "n": 1, "s": "N", "text": "Ada pelukan yang sudah disiapkan sejak kamu berangkat.", "nx": "Ada mata yang menunggu melihatmu kembali —"}, {"t": 217.2, "n": 1, "s": "N", "text": "Ada mata yang menunggu melihatmu kembali —", "nx": "dengan selamat."}, {"t": 219.2, "n": 1, "s": "B", "text": "dengan selamat."}, {"t": 221.3, "n": 1, "s": "J"}, {"t": 222.9, "n": 1, "s": "W", "text": "Suami. Istri. Anak. Orang tua. Sahabat."}, {"t": 224.9, "n": 1, "s": "J"}, {"t": 226.5, "n": 1, "s": "N", "text": "Mereka tidak butuh medalimu.", "nx": "Mereka tidak butuh catatanmu."}, {"t": 229.0, "n": 1, "s": "N", "text": "Mereka tidak butuh catatanmu."}, {"t": 231.0, "n": 1, "s": "J"}, {"t": 232.6, "n": 1, "s": "B", "text": "Mereka hanya butuh kamu pulang."}, {"t": 235.1, "n": 1, "s": "J"}, {"t": 236.7, "n": 1, "s": "W", "text": "Maka berlarilah dengan bijak.", "nx": "Jaga tubuhmu seperti kamu menjaga mereka."}, {"t": 239.5, "n": 1, "s": "W", "text": "Jaga tubuhmu seperti kamu menjaga mereka."}, {"t": 242.4, "n": 1, "s": "J"}, {"t": 244.0, "n": 1, "s": "N", "text": "Karena finish line bukan akhir dari petualangan —", "nx": "finish line adalah jalan pulang."}, {"t": 247.7, "n": 1, "s": "B", "text": "finish line adalah jalan pulang."}, {"t": 250.5, "n": 1, "s": "J"}, {"t": 252.1, "n": 1, "s": "G", "text": "Pulang ke gunung yang kamu cintai.", "nx": "Pulang ke kawan yang menemanimu."}, {"t": 255.4, "n": 1, "s": "G", "text": "Pulang ke kawan yang menemanimu.", "nx": "Dan pulang —"}, {"t": 258.2, "n": 1, "s": "G", "text": "Dan pulang —", "nx": "ke keluarga yang paling mencintaimu."}, {"t": 260.3, "n": 1, "s": "G", "text": "ke keluarga yang paling mencintaimu."}, {"t": 263.9, "n": 1, "s": "G", "ph": "PENUTUP", "text": "Selamat berlari. Jaga dirimu. Jaga kawanmu."}, {"t": 268.0, "n": 1, "s": "G", "text": "sampai bertemu di garis finish."}, {"t": 276.0, "s": "X", "ph": ""}];
+var spd=1.0,cidx=-1,fadeDone=false,raf=null,running=false;
+var au=document.getElementById('au');
+var actx=null,gainNode=null,srcNode=null,wakeLock=null;
+
+// BG canvas
+var cv=document.getElementById('bgc'),cx=cv.getContext('2d');
+function drawBG(){
+  var W=cv.width=innerWidth,H=cv.height=innerHeight;
+  var sk=cx.createLinearGradient(0,0,0,H);
+  sk.addColorStop(0,'#04051A');sk.addColorStop(.42,'#0A0D26');
+  sk.addColorStop(.78,'#120C04');sk.addColorStop(1,'#07090F');
+  cx.fillStyle=sk;cx.fillRect(0,0,W,H);
+  for(var i=0;i<180;i++){cx.beginPath();cx.arc(Math.random()*W,Math.random()*H*.6,Math.random()*1.3,0,Math.PI*2);cx.fillStyle='rgba(255,255,240,'+(0.15+Math.random()*0.85)+')';cx.fill();}
+  var mp=[0,.70,.05,.50,.13,.61,.24,.38,.34,.55,.45,.31,.53,.46,.63,.34,.72,.52,.82,.43,.92,.56,1,.48];
+  cx.beginPath();cx.moveTo(0,H*.70);
+  for(var i=0;i<mp.length;i+=2)cx.lineTo(mp[i]*W,mp[i+1]*H);
+  cx.lineTo(W,H);cx.lineTo(0,H);cx.closePath();
+  cx.fillStyle='#08091A';cx.fill();
+}
+drawBG();
+window.addEventListener('resize',drawBG);
+
+function fmt(s){var m=Math.floor(s/60);return m+':'+('0'+Math.floor(s%60)).slice(-2);}
+
+function getS(){
+  return BASE.map(function(e){
+    if(!e.n)return Object.assign({},e);
+    return Object.assign({},e,{t:NS+(e.t-NS)/spd});
+  });
+}
+
+function show(e){
+  var mt=document.getElementById('mt');
+  var pl=document.getElementById('pl');
+  var nl=document.getElementById('nl');
+  var jb=document.getElementById('jb');
+  if(e.ph!==undefined){pl.textContent=e.ph||'';pl.style.opacity=e.ph?'1':'0';}
+  mt.style.opacity='0';
+  setTimeout(function(){
+    mt.className='';
+    if(e.s==='T'){mt.classList.add('T');mt.innerHTML='<span>'+(e.text||'')+'</span>'+(e.sub?'<span class="sub">'+e.sub+'</span>':'');}
+    else if(e.s==='X'||e.s==='J'){mt.innerHTML='';}
+    else{mt.textContent=e.text||'';if(e.s==='B')mt.classList.add('B');else if(e.s==='W')mt.classList.add('W');else if(e.s==='G')mt.classList.add('G');}
+    nl.textContent=e.nx?'▸  '+e.nx:'';
+    jb.style.opacity=(e.s==='J')?'1':'0';
+    mt.style.opacity='1';
+  },200);
+}
+
+function doFade(){
+  if(!gainNode)return;
+  var dur=AUDIO_STOP-FADE_START;
+  var now=actx.currentTime;
+  gainNode.gain.cancelScheduledValues(now);
+  gainNode.gain.setValueAtTime(gainNode.gain.value,now);
+  gainNode.gain.linearRampToValueAtTime(0,now+dur);
+  document.getElementById('fi').style.opacity='1';
+  setTimeout(function(){au.pause();document.getElementById('fi').style.opacity='0';},dur*1000+200);
+}
+
+function tick(){
+  var t=au.currentTime;
+  document.getElementById('ct').textContent=fmt(t);
+  document.getElementById('pb').style.width=(Math.min(t,AUDIO_STOP)/AUDIO_STOP*100).toFixed(2)+'%';
+  if(t>=FADE_START&&!fadeDone){fadeDone=true;doFade();}
+  if(t>=AUDIO_STOP){au.pause();cancelAnimationFrame(raf);return;}
+  var sc=getS();
+  var ix=0;
+  for(var i=0;i<sc.length;i++){if(sc[i].t<=t)ix=i;else break;}
+  if(ix!==cidx){cidx=ix;show(sc[ix]);}
+  if(!au.paused)raf=requestAnimationFrame(tick);
+}
+
+function adjS(d){
+  if(d===0)spd=1.0;
+  else spd=parseFloat(Math.min(1.8,Math.max(0.5,spd+(d*0.1))).toFixed(1));
+  document.getElementById('sd').textContent=spd.toFixed(1)+'×';
+  cidx=-1;
+}
+
+function doT(){
+  if(!running)return;
+  if(actx&&actx.state==='suspended')actx.resume();
+  if(au.paused){au.play();document.getElementById('bpp').innerHTML='&#9646;&#9646; Pause';raf=requestAnimationFrame(tick);}
+  else{au.pause();document.getElementById('bpp').innerHTML='&#9654; Play';cancelAnimationFrame(raf);}
+}
+
+function doR(){
+  if(!running)return;
+  if(gainNode){var now=actx.currentTime;gainNode.gain.cancelScheduledValues(now);gainNode.gain.setValueAtTime(1,now);}
+  au.currentTime=0;cidx=-1;fadeDone=false;
+  document.getElementById('pb').style.width='0%';
+  document.getElementById('fi').style.opacity='0';
+  if(au.paused){au.play();document.getElementById('bpp').innerHTML='&#9646;&#9646; Pause';}
+  raf=requestAnimationFrame(tick);
+}
+
+function doFS(){
+  var el=document.documentElement;
+  if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+    if(el.requestFullscreen)el.requestFullscreen();
+    else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+  }else{
+    if(document.exitFullscreen)document.exitFullscreen();
+    else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+  }
+}
+
+async function requestWake(){
+  try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');document.getElementById('wk').textContent='● layar aktif';document.getElementById('wk').style.color='rgba(158,212,168,.4)';}}catch(e){}
+}
+
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'){
+    if(actx&&actx.state==='suspended')actx.resume();
+  }
+});
+
+function startApp(){
+  var btn=document.getElementById('tapbtn');
+  var err=document.getElementById('errmsg');
+  if(running)return;
+  btn.textContent='Memuat...';
+  btn.disabled=true;
+  err.textContent='';
+
+  try{
+    actx=new(window.AudioContext||window.webkitAudioContext)();
+    gainNode=actx.createGain();
+    gainNode.gain.value=1;
+    gainNode.connect(actx.destination);
+    srcNode=actx.createMediaElementSource(au);
+    srcNode.connect(gainNode);
+  }catch(e){
+    err.textContent='Audio init error: '+e.message;
+    btn.textContent='&#9654; MULAI';btn.disabled=false;return;
+  }
+
+  actx.resume().then(function(){
+    au.play().then(function(){
+      running=true;
+      document.getElementById('splash').style.display='none';
+      show(BASE[0]);
+      raf=requestAnimationFrame(tick);
+      requestWake();
+    }).catch(function(e){
+      err.textContent='Play error: '+e.message;
+      btn.innerHTML='&#9654;&nbsp; MULAI';btn.disabled=false;
+    });
+  });
+}
+
+document.getElementById('tapbtn').addEventListener('click',startApp);
+document.getElementById('bpp').addEventListener('click',doT);
+document.getElementById('brul').addEventListener('click',doR);
+document.getElementById('bfs').addEventListener('click',doFS);
+document.getElementById('bminus').addEventListener('click',function(){adjS(-1);});
+document.getElementById('bplus').addEventListener('click',function(){adjS(1);});
+document.getElementById('breset').addEventListener('click',function(){adjS(0);});
+</script>
+</body>
+</html>
